@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100c09">
+<title>Урок 3 из 4 · Войс → черновик — Контент-машина</title>
+<style>
+:root {
+  --ink-950:#100c09; --ink-900:#17110d; --umber-800:#281b13; --walnut:#3e2b1d;
+  --paper:#f2e8d8; --paper-2:#e6d8c3; --body:#30271f; --muted:#77695c;
+  --gold:#d5b06f; --gold-deep:#a67b3f; --cyan:#71d4dc; --line:rgba(68,45,27,.15);
+  --night-line:rgba(242,232,216,.12); --success:#7d9f82; --radius:26px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;color:var(--paper);font-family:var(--sans);line-height:1.7;background:radial-gradient(circle at 15% 0,rgba(166,123,63,.16),transparent 32rem),linear-gradient(180deg,#0d0a08,#17110d 52%,#0b0806)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+a{color:inherit}.topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--night-line);background:rgba(13,10,8,.83);backdrop-filter:blur(18px)}
+.topbar-inner{width:min(1120px,calc(100% - 28px));min-height:58px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.brand i{display:inline-block;width:7px;height:7px;margin-right:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px rgba(113,212,220,.6)}
+.lesson-nav{display:flex;gap:5px}.lesson-nav a{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--night-line);border-radius:50%;color:#a79787;text-decoration:none;font:700 12px var(--mono)}.lesson-nav a[aria-current="page"]{color:var(--ink-950);border-color:var(--gold);background:var(--gold)}
+.stage{width:min(1080px,calc(100% - 30px));margin:42px auto 90px}.workbook{overflow:hidden;border:1px solid var(--night-line);border-radius:32px;background:var(--ink-900);box-shadow:0 32px 100px rgba(0,0,0,.5)}
+.hero{position:relative;min-height:560px;display:flex;align-items:flex-end;overflow:hidden;background:#120e0b}.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,6,5,.05) 10%,rgba(8,6,5,.28) 52%,rgba(8,6,5,.96) 100%),linear-gradient(90deg,rgba(8,6,5,.78),rgba(8,6,5,.12) 72%)}
+.hero-copy{position:relative;z-index:1;max-width:760px;padding:56px}.eyebrow{margin:0 0 18px;color:var(--gold);font:800 11px var(--sans);letter-spacing:.2em;text-transform:uppercase}.hero h1{max-width:720px;margin:0 0 20px;font:500 clamp(44px,7vw,78px)/.98 var(--serif);letter-spacing:-.045em;text-wrap:balance}.hero-lead{max-width:650px;margin:0;color:#e3d8ca;font-size:18px;line-height:1.55;text-wrap:pretty}
+.progress{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:20px 42px;border-bottom:1px solid var(--line);color:var(--muted);background:var(--paper);font:800 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}.progress-track{height:3px;background:rgba(48,39,31,.12)}.progress-track span{display:block;height:100%;background:linear-gradient(90deg,var(--gold-deep),var(--cyan))}
+.paper{padding:70px clamp(24px,6vw,84px) 80px;color:var(--body);background:linear-gradient(180deg,#f3eadc,#ede1d0)}.paper-inner{max-width:760px;margin:auto}.result-card{display:grid;grid-template-columns:auto 1fr;gap:15px;margin:0 0 52px;padding:20px 22px;border-top:1px solid rgba(166,123,63,.35);border-bottom:1px solid rgba(166,123,63,.35);background:rgba(255,255,255,.22)}.result-card b{color:var(--gold-deep);font:800 11px var(--mono);letter-spacing:.12em;text-transform:uppercase}.result-card span{font-family:var(--serif);font-size:21px;line-height:1.3}
+.paper h2{margin:68px 0 22px;font:500 clamp(31px,5vw,48px)/1.06 var(--serif);letter-spacing:-.035em;text-wrap:balance}.paper h3{margin:38px 0 14px;font:700 21px/1.3 var(--sans)}.paper p{margin:0 0 18px}.paper ul,.paper ol{padding-left:24px;margin:0 0 24px}.paper li{margin:8px 0}.paper strong{color:#1e1712}.paper hr{height:1px;margin:54px 0;border:0;background:linear-gradient(90deg,transparent,rgba(166,123,63,.35),transparent)}.paper blockquote{margin:30px 0;padding:20px 24px;border:1px solid rgba(166,123,63,.25);border-radius:16px;background:rgba(166,123,63,.07);font-family:var(--serif);font-size:18px}.paper blockquote p:last-child{margin-bottom:0}
+.code-shell{margin:32px 0;border:1px solid rgba(113,212,220,.18);border-radius:18px;overflow:hidden;background:#0d1212;box-shadow:0 22px 55px rgba(31,21,14,.16)}.code-head{min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 10px 8px 18px;border-bottom:1px solid rgba(113,212,220,.12);color:#a8c4c4;font:800 10px var(--mono);letter-spacing:.12em;text-transform:uppercase}.copy-button{min-width:118px;min-height:40px;border:1px solid rgba(113,212,220,.32);border-radius:11px;color:#bceff1;background:rgba(113,212,220,.08);font:800 12px var(--sans);cursor:pointer}.copy-button:hover,.copy-button:focus-visible{background:rgba(113,212,220,.16);outline:2px solid rgba(113,212,220,.55);outline-offset:2px}.code-shell pre{max-height:600px;margin:0;padding:22px;overflow:auto;color:#d7e6e2;font:13px/1.7 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}.copy-status{min-height:0;padding:0 18px;color:#bceff1;font-size:12px}.copy-status:not(:empty){padding-top:8px;padding-bottom:12px}
+.finish{margin-top:70px;padding-top:34px;border-top:1px solid var(--line)}.finish h2{margin-top:0}.telegram{min-height:54px;display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:0 24px;border-radius:999px;color:#100c09;background:linear-gradient(135deg,var(--gold),#e3c88f);text-decoration:none;font-weight:850;box-shadow:0 12px 35px rgba(166,123,63,.22)}.telegram:hover,.telegram:focus-visible{transform:translateY(-1px);outline:2px solid var(--cyan);outline-offset:3px}.footer{padding:26px 42px;color:#938375;border-top:1px solid var(--night-line);font-size:12px;background:#100c09}
+@media(max-width:700px){.topbar-inner{min-height:62px;gap:8px}.brand{max-width:130px;font-size:8px;letter-spacing:.13em}.lesson-nav{gap:3px}.lesson-nav a{width:44px;height:44px}.stage{width:min(100% - 16px,1080px);margin:16px auto 46px}.workbook{border-radius:22px}.hero{min-height:510px}.hero-img{object-position:60% center}.hero:after{background:linear-gradient(180deg,rgba(8,6,5,.03),rgba(8,6,5,.35) 46%,rgba(8,6,5,.98) 82%),linear-gradient(90deg,rgba(8,6,5,.55),rgba(8,6,5,.1))}.hero-copy{padding:30px 24px 34px}.hero h1{font-size:43px}.hero-lead{font-size:16px}.progress{grid-template-columns:1fr auto;padding:18px 22px}.progress-track{grid-column:1/-1;grid-row:2}.paper{padding:48px 20px 58px}.result-card{grid-template-columns:1fr;gap:6px}.paper h2{margin-top:54px}.paper blockquote{padding:18px}.code-shell{margin-left:-8px;margin-right:-8px}.code-shell pre{font-size:12px;padding:18px;max-height:520px}.copy-button{min-height:44px}.footer{padding:22px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.telegram{transition:none}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand"><i></i>Зинченко · Контент-машина</div><nav class="lesson-nav" aria-label="Уроки"><a href="lesson-1-filter.html" aria-label="Урок 1">1</a><a href="lesson-2-voice-profile.html" aria-label="Урок 2">2</a><a href="lesson-3-voice-to-draft.html" aria-current="page">3</a><a href="lesson-4-platform-profile.html" aria-label="Урок 4">4</a></nav></div></header>
+<main class="stage"><article class="workbook">
+<section class="hero">
+<img class="hero-img" src="assets/lesson-3-hero.png" alt="" aria-hidden="true">
+<div class="hero-copy"><p class="eyebrow">Урок 3 из 4 · Войс → черновик</p><h1>Наговорить мысль и собрать рабочую основу</h1><p class="hero-lead">Сохраняем фактуру и ход мысли, а агент приводит их в порядок — без новых фактов и без попытки выдать черновик за публикацию.</p></div>
+</section>
+<div class="progress"><span>Маршрут курса</span><div class="progress-track" aria-label="Прогресс 75%"><span style="width:75%"></span></div><span>75%</span></div>
+<section class="paper"><div class="paper-inner">
+<div class="result-card"><b>Результат урока</b><span>Проверенный базовый черновик</span></div>
+<h2 id="_1">Войс не должен звучать как пост</h2>
+<p>Когда пытаешься говорить сразу красиво, включается внутренний редактор: формулируешь, спотыкаешься, перезаписываешь. Через несколько попыток можно решить, что голосом вообще не получается.</p>
+<p>Но голос нужен не для готового текста. Он сохраняет фактуру, эмоцию и ход мысли до того, как ты начал себя цензурировать. Говори как другу: с повторами, паузами и перескоками. Агент потом соберёт логику и текст.</p>
+<p>Одна расшифровка без рамки тоже не решает задачу. Агент напишет что-то похожее на твою мысль, но легко сдвинет смысл, важную оговорку или угол разбора.</p>
+<hr>
+<h2 id="_2">Карточка перед записью</h2>
+<p>Перед войсом или вместе с ним дай агенту четыре вещи:</p>
+<p>• <strong>Главная мысль.</strong> Что читатель должен понять. Не тема, а вывод.
+• <strong>Фактура.</strong> Цифры, сроки, имена, названия, примеры, что было до и что стало.
+• <strong>Угол.</strong> Ошибка, наблюдение, правило, спор с популярным мнением - с какой стороны ты это разбираешь.
+• <strong>Режим пробелов.</strong> Если критичной детали не хватает, агент задаёт до трёх вопросов. Если ты пишешь «пиши так», он опускает пробел, а не додумывает его.</p>
+<p>Если главная мысль пока не сформулирована, это нормально. Отправь сырой войс и попроси агента предложить формулировку. До подтверждения не переходи к черновику.</p>
+<hr>
+<h2 id="_3">Сначала поправь распознавание, не текст</h2>
+<p>До отправки в агент исправь в расшифровке только имена, числа, названия и термины. Распознавание речи часто ошибается именно там, где догадка опасна: агент примет ошибку за факт.</p>
+<p>Слова-паразиты, повторы и структуру заранее не полируй. Не превращай расшифровку в полуготовую статью. Это работа сборщика черновика, и в сырой речи легче не потерять живую деталь.</p>
+<h3 id="_4">Три маршрута расшифровки</h3>
+<p>Выбирай не «лучший сервис», а подходящий класс маршрута:</p>
+<ol>
+<li><strong>Речь сразу в текст внутри чата или приложения.</strong> Быстро, если запись и работа с черновиком происходят в одном месте.</li>
+<li><strong>Диктофон или голосовое сообщение → отдельная расшифровка.</strong> Удобно, если ты привык сначала наговаривать, а собирать текст позже.</li>
+<li><strong>Локальная или корпоративная расшифровка.</strong> Нужна, когда важен контроль над тем, куда уходят записи и данные.</li>
+</ol>
+<p>Доступность, лимиты, стоимость и условия обработки данных зависят от выбранного инструмента и тарифа. Не отправляй в случайный сервис клиентские переписки, пароли, внутренние документы и чужие персональные данные. Если в войсе есть чувствительный контекст, перескажи его без идентификаторов или выбери маршрут, где контролируешь данные.</p>
+<h3 id="_5">Рекомендуемый минимальный путь</h3>
+<p>Если в рабочем чате есть ввод голосом или диктовка, надиктуй там. Если нет, получи расшифровку любым доступным способом и вставь её текстом.</p>
+<p>Дальше последовательность такая:</p>
+<ol>
+<li>Один раз установи мастер-промпт с Voice Profile.</li>
+<li>Одним сообщением отправь карточку из четырёх пунктов и расшифровку.</li>
+<li>Подтверди главную мысль или ответь на вопросы агента.</li>
+<li>Получи черновик.</li>
+<li>Проверь его вручную.</li>
+</ol>
+<hr>
+<h2 id="_6">Обычный чат или отдельный копирайтер</h2>
+<p>В обычном чате ты каждый раз отправляешь мастер-промпт, Voice Profile и расшифровку. Это нормально, когда только пробуешь процесс.</p>
+<p>Я использую другой вариант: у меня на компьютере живёт отдельный копирайтер в Hermes. В его постоянных правилах сохранены мой Voice Profile, редакторские ограничения и запрет выдумывать факты. Поэтому я отправляю тему, войс или черновик без повторного объяснения базовых вещей. Если вижу повторяющуюся ошибку, уточняю одно правило, а не собираю настройку заново.</p>
+<p>Это не делает агента безошибочным. Результат всё равно проходит мою короткую ручную проверку. Просто постоянные правила не смешиваются с разовыми задачами и не теряются при новом чате.</p>
+<hr>
+<h2 id="_7">Как это выглядит</h2>
+<blockquote>
+<p>Пример условный, он показывает механику, а не опыт автора.</p>
+</blockquote>
+<p><strong>Исходный войс (расшифровка как есть)</strong></p>
+<p>«Короче, слушай, вот что хочу сказать. Я тут заметил, ну, не посчитал, просто заметил. Я на пост трачу час, ну как час, иногда больше. И самое смешное, что мысль там одна. То есть я сижу, пишу, переписываю, потому что мне кажется, что вот тут надо ещё объяснить, вот тут ещё пример добавить. А по факту человеку нужна одна мысль, ну и вот. А ещё, да, важно: я когда наговариваю, я за две минуты это всё говорю. И там сразу видно, что главное, а что я просто проговариваю. Ну вот. Получается, писать быстро это не про скорость печати, а про то, что ты уже знаешь, что сказать. Как-то так.»</p>
+<p><strong>Черновик после агента</strong></p>
+<p>Я на пост трачу час. Иногда больше. И мысль в нём одна.</p>
+<p>Сижу, пишу, переписываю. Кажется, что вот здесь надо ещё объяснить, вот здесь ещё пример добавить.</p>
+<p>Когда наговариваю голосом, за две минуты говорю всё то же самое. И там сразу видно, что главное, а что я просто проговариваю.</p>
+<p>Получается, писать быстро это не про скорость печати. Это про то, что ты уже знаешь, что сказать.</p>
+<p>Я это не посчитал, просто заметил.</p>
+<p>Факты есть только из войса: час на пост, иногда больше, одна мысль и две минуты на голос. Агент не добавил измерений и сохранил оговорку. Он убрал мусор речи и собрал порядок мысли.</p>
+<hr>
+<h2 id="-">Мастер-промпт сборщика</h2>
+<p>Один раз подставь свой Voice Profile из Урока 2 вместо пометки в квадратных скобках. Затем одним сообщением отправляй карточку из четырёх пунктов и расшифровку.</p>
+<div class="code-shell" data-copy-block>
+  <div class="code-head"><span>Готовый промпт</span><button class="copy-button" type="button" data-payload="0KLRiyDQvNC+0Lkg0YDQtdC00LDQutGC0L7RgC4g0KHQvtCx0LjRgNCw0Lkg0YfQtdGA0L3QvtCy0LjQutC4INC80L7QuNC8INCz0L7Qu9C+0YHQvtC8LCDQvdC1INC/0YDQuNC00YPQvNGL0LLQsNGPINC30LAg0LzQtdC90Y8g0YTQsNC60YLRiy4KCtCc0J7QmSDQk9Ce0JvQntChClvQktCh0KLQkNCS0Kwg0KHQrtCU0JAg0KHQktCe0JkgVk9JQ0UgUFJPRklMRSDQmNCXINCj0KDQntCa0JAgMl0KCtCk0JDQmtCi0KsK0JHQtdGA0Lgg0YTQsNC60YLRiyDRgtC10LrRg9GJ0LXQs9C+INC/0L7RgdGC0LAg0YLQvtC70YzQutC+INC40Lc6CjEuINGC0LXQutGD0YnQtdC5INGA0LDRgdGI0LjRhNGA0L7QstC60Lg7CjIuINC80L7QuNGFINC+0YLQstC10YLQvtCyINC90LAg0YLQstC+0Lgg0YPRgtC+0YfQvdGP0Y7RidC40LUg0LLQvtC/0YDQvtGB0YsuCgpWb2ljZSBQcm9maWxlINC30LDQtNCw0ZHRgiDRgtC+0LvRjNC60L4g0YHRgtC40LvRjC4g0J3QtSDQv9C10YDQtdC90L7RgdC4INC40Lcg0L3QtdCz0L4g0LjRgdGC0L7RgNC40LgsINGG0LjRhNGA0YssINC80L3QtdC90LjRjywg0YHQvtCx0YvRgtC40Y8g0LjQu9C4INC+0LHRgdGC0L7Rj9GC0LXQu9GM0YHRgtCy0LAg0LIg0L3QvtCy0YvQuSDRgtC10LrRgdGCLgoK0J3QtSDQt9Cw0L/QvtC70L3Rj9C5INC/0YDQvtCx0LXQu9GLINC00L7Qs9Cw0LTQutCw0LzQuC4g0JXRgdC70Lgg0LrRgNC40YLQuNGH0L3QvtC5INC40L3RhNC+0YDQvNCw0YbQuNC4INC90LUg0YXQstCw0YLQsNC10YIsINC30LDQtNCw0Lkg0LLQvtC/0YDQvtGBLiDQldGB0LvQuCDRjyDQvtGC0LLQtdGH0YMgwqvQv9C40YjQuCDRgtCw0LrCuywg0LjRgdC/0L7Qu9GM0LfRg9C5INGC0L7Qu9GM0LrQviDRg9C20LUg0LjQvNC10Y7RidC40LXRgdGPINC00LDQvdC90YvQtSDQuCDQvtC/0YPRgdGC0Lgg0L3QtdC00L7RgdGC0LDRjtGJ0YPRjiDQtNC10YLQsNC70YwuCgrQn9Ce0KDQr9CU0J7QmiDQoNCQ0JHQntCi0KsKMS4g0KHQvdCw0YfQsNC70LAg0YHRhNC+0YDQvNGD0LvQuNGA0YPQuSDRgNCw0LHQvtGH0YPRjiDQs9C70LDQstC90YPRjiDQvNGL0YHQu9GMINC+0LTQvdC40Lwg0L/RgNC10LTQu9C+0LbQtdC90LjQtdC8LgoyLiDQldGB0LvQuCDQs9C70LDQstC90LDRjyDQvNGL0YHQu9GMINC90LUg0L3QsNC30LLQsNC90LAg0LIg0LjRgdGC0L7Rh9C90LjQutC1LCDQv9GA0LXQtNC70L7QttC4INC10ZEg0Lgg0L7RgdGC0LDQvdC+0LLQuNGB0Ywg0LTQviDQvNC+0LXQs9C+INC/0L7QtNGC0LLQtdGA0LbQtNC10L3QuNGPIMKr0LTQsMK7INC40LvQuCDCq9C/0LjRiNC4INGC0LDQusK7LgozLiDQn9GA0L7QstC10YDRjCwg0YXQstCw0YLQsNC10YIg0LvQuCDQuNC90YTQvtGA0LzQsNGG0LjQuCDQtNC70Y8g0YfQtdGA0L3QvtCy0LjQutCwLiDQldGB0LvQuCDQvdC10YIsINC30LDQtNCw0Lkg0L3QtSDQsdC+0LvRjNGI0LUg0YLRgNGR0YUg0LrQvtGA0L7RgtC60LjRhSDQstC+0L/RgNC+0YHQvtCyINC4INC+0YHRgtCw0L3QvtCy0LjRgdGMLgo0LiDQmtC+0LPQtNCwINCz0LvQsNCy0L3QsNGPINC80YvRgdC70Ywg0L/QvtC00YLQstC10YDQttC00LXQvdCwINC4INC00LDQvdC90YvRhSDRhdCy0LDRgtCw0LXRgiwg0L3QsNC/0LjRiNC4INGH0LXRgNC90L7QstC40LouCgrQmtCQ0Jog0KDQkNCR0J7QotCQ0KLQrCDQoSDQoNCQ0KHQqNCY0KTQoNCe0JLQmtCe0JkKLSDQodC+0YXRgNCw0L3Rj9C5INGG0LjRhNGA0YssINC40LzQtdC90LAsINC90LDQt9Cy0LDQvdC40Y8sINGC0LXRgNC80LjQvdGLLCDQv9GA0LjQvNC10YDRiywg0L7Qs9C+0LLQvtGA0LrQuCwg0L/QvtGB0LvQtdC00YHRgtCy0LjRjyDQuCDQvNC+0Lkg0YPQs9C+0Lsg0YDQsNC30LHQvtGA0LAuCi0g0J3QtSDRgdGC0LXQvdC+0LPRgNCw0YTQuNGA0YPQuTog0YPQsdC40YDQsNC5INGB0LvQvtCy0LAt0L/QsNGA0LDQt9C40YLRiywg0YHQsNC80L7Qv9C10YDQtdCx0LjQstCw0L3QuNGPINC4INC/0YDQvtCz0L7QstCw0YDQuNCy0LDQvdC40LUg0LLRgdC70YPRhSwg0YHQvtCx0LjRgNCw0Lkg0YHQstGP0LfQvdGL0Lkg0YLQtdC60YHRgi4KLSDQndC1INGB0LzRj9Cz0YfQsNC5INC80L7RjiDQv9C+0LfQuNGG0LjRjiDQuCDQvdC1INC80LXQvdGP0Lkg0YPQs9C+0Lsg0L3QsCDQsdC+0LvQtdC1INGD0LTQvtCx0L3Ri9C5INC40LvQuCDRgdCx0LDQu9Cw0L3RgdC40YDQvtCy0LDQvdC90YvQuS4KLSDQldGB0LvQuCDRjyDRgdC60LDQt9Cw0LssINGH0YLQviDRh9GC0L4t0YLQviDQvdC1INC40LfQvNC10YDRj9C7INC40LvQuCDQvdC1INGD0LLQtdGA0LXQvSwg0L7RgdGC0LDQstGMINGN0YLRgyDQvtCz0L7QstC+0YDQutGDINCyINGC0LXQutGB0YLQtS4KCtCf0KDQntCS0JXQoNCa0JAg0KfQldCg0J3QntCS0JjQmtCQCi0g0J3QtSDQvtGB0YLQsNCy0LvRj9C5INGC0LjQv9C+0LLQvtC5INGA0LDQt9Cz0L7QvSwg0LrQsNC90YbQtdC70Y/RgNC40YIsINC/0YPRgdGC0YvQtSDQv9C10YDQtdGF0L7QtNGLINC4INCy0YvQstC+0LTRiy3Qv9GD0YHRgtGL0YjQutC4LgotINCf0YDQvtCy0LXRgNGMINGA0LjRgtC8OiDQvdC1INC00LXQu9Cw0Lkg0LDQsdC30LDRhtGLINC4INC/0YDQtdC00LvQvtC20LXQvdC40Y8g0L7QtNC40L3QsNC60L7QstGL0LzQuCDQv9C+INC00LvQuNC90LUuCi0g0KPQsdC40YDQsNC5INGE0YDQsNC30YssINC60L7RgtC+0YDRi9C1INC80L7QttC90L4g0LHQtdC3INC40LfQvNC10L3QtdC90LjQuSDQv9C+0YHRgtCw0LLQuNGC0Ywg0LIg0YfRg9C20L7QuSDQv9C+0YHRgiwg0LXRgdC70Lgg0L7QvdC4INC90LUg0L3QtdGB0YPRgiDQutC+0L3QutGA0LXRgtC90L7QuSDQvNGL0YHQu9C4INC40Lcg0LjRgdGC0L7Rh9C90LjQutCwLgotINCd0LUg0LjRgdC/0L7Qu9GM0LfRg9C5INC00LvQuNC90L3QvtC1INGC0LjRgNC1INC4IMKr0YPQvNC90YvQtcK7INC60LDQstGL0YfQutC4LgoK0KTQntCg0JzQkNCiINCe0KLQktCV0KLQkArQldGB0LvQuCDQvdGD0LbQvdGLINGD0YLQvtGH0L3QtdC90LjRjzoKMS4g0KDQsNCx0L7Rh9Cw0Y8g0LPQu9Cw0LLQvdCw0Y8g0LzRi9GB0LvRjC4KMi4g0JTQviDRgtGA0ZHRhSDQstC+0L/RgNC+0YHQvtCyLgoK0J/QvtGB0LvQtSDQstC+0L/RgNC+0YHQvtCyINC+0YHRgtCw0L3QvtCy0LjRgdGMLiDQp9C10YDQvdC+0LLQuNC6INC90LUg0L/QuNGI0LguCgrQldGB0LvQuCDRg9GC0L7Rh9C90LXQvdC40Y8g0L3QtSDQvdGD0LbQvdGLINC40LvQuCDRjyDRg9C20LUg0L7RgtCy0LXRgtC40Ls6CjEuINCT0LvQsNCy0L3QsNGPINC80YvRgdC70YwuCjIuINCn0LXRgNC90L7QstC40Log0L/QvtGB0YLQsC4KMy4g0KHQvtC00LXRgNC20LDRgtC10LvRjNC90YvQtSDRhNGA0LDQs9C80LXQvdGC0YssINC60L7RgtC+0YDRi9C1INC90LUg0LLQvtGI0LvQuCwg0Lgg0L/QvtGH0LXQvNGDLgoK0J3QtSDQv9C10YDQtdGH0LjRgdC70Y/QuSDQvtGC0LTQtdC70YzQvdC+INGD0LTQsNC70ZHQvdC90YvQtSDRgdC70L7QstCwLdC/0LDRgNCw0LfQuNGC0YssINC/0L7QstGC0L7RgNGLINC4INC80LXQttC00L7QvNC10YLQuNGPLgo=">Скопировать</button></div>
+  <pre><code>Ты мой редактор. Собирай черновики моим голосом, не придумывая за меня факты.
+
+МОЙ ГОЛОС
+[ВСТАВЬ СЮДА СВОЙ VOICE PROFILE ИЗ УРОКА 2]
+
+ФАКТЫ
+Бери факты текущего поста только из:
+1. текущей расшифровки;
+2. моих ответов на твои уточняющие вопросы.
+
+Voice Profile задаёт только стиль. Не переноси из него истории, цифры, мнения, события или обстоятельства в новый текст.
+
+Не заполняй пробелы догадками. Если критичной информации не хватает, задай вопрос. Если я отвечу «пиши так», используй только уже имеющиеся данные и опусти недостающую деталь.
+
+ПОРЯДОК РАБОТЫ
+1. Сначала сформулируй рабочую главную мысль одним предложением.
+2. Если главная мысль не названа в источнике, предложи её и остановись до моего подтверждения «да» или «пиши так».
+3. Проверь, хватает ли информации для черновика. Если нет, задай не больше трёх коротких вопросов и остановись.
+4. Когда главная мысль подтверждена и данных хватает, напиши черновик.
+
+КАК РАБОТАТЬ С РАСШИФРОВКОЙ
+- Сохраняй цифры, имена, названия, термины, примеры, оговорки, последствия и мой угол разбора.
+- Не стенографируй: убирай слова-паразиты, самоперебивания и проговаривание вслух, собирай связный текст.
+- Не смягчай мою позицию и не меняй угол на более удобный или сбалансированный.
+- Если я сказал, что что-то не измерял или не уверен, оставь эту оговорку в тексте.
+
+ПРОВЕРКА ЧЕРНОВИКА
+- Не оставляй типовой разгон, канцелярит, пустые переходы и выводы-пустышки.
+- Проверь ритм: не делай абзацы и предложения одинаковыми по длине.
+- Убирай фразы, которые можно без изменений поставить в чужой пост, если они не несут конкретной мысли из источника.
+- Не используй длинное тире и «умные» кавычки.
+
+ФОРМАТ ОТВЕТА
+Если нужны уточнения:
+1. Рабочая главная мысль.
+2. До трёх вопросов.
+
+После вопросов остановись. Черновик не пиши.
+
+Если уточнения не нужны или я уже ответил:
+1. Главная мысль.
+2. Черновик поста.
+3. Содержательные фрагменты, которые не вошли, и почему.
+
+Не перечисляй отдельно удалённые слова-паразиты, повторы и междометия.
+</code></pre>
+  <div class="copy-status" aria-live="polite"></div>
+</div>
+<hr>
+<h2 id="_8">Ручная проверка автора</h2>
+<p>Перед публикацией проверь пять вещей:</p>
+<ol>
+<li><strong>Имена, числа, названия и термины.</strong> Расшифровка и агент могли исказить одно и то же место.</li>
+<li><strong>Главная мысль и угол.</strong> Текст доказывает то, что ты хотел сказать, а не безопасную версию рядом с этим?</li>
+<li><strong>Новые факты.</strong> В черновике нет ничего, чего не было в войсе или твоих ответах?</li>
+<li><strong>Оговорки и позиция.</strong> Агент не потерял «я не измерял», не смягчил спорную мысль и не заменил её общим советом?</li>
+<li><strong>Объём правок.</strong> Правки локальные или ты переписываешь текст целиком? Во втором случае сначала вернись к рамке и Voice Profile, а не пытайся бесконечно косметически чинить результат.</li>
+</ol>
+<p>Успех этого урока не в готовой публикации. У тебя есть один черновик из собственной расшифровки: главная мысль подтверждена, новых фактов нет, а правки не требуют полной переписи.</p>
+<hr>
+<h2 id="_9">Что дальше</h2>
+<p>Базовый черновик ещё не знает, куда его публикуют и какую задачу он должен решить. В последнем уроке добавим правила конкретной связки: площадка, формат и задача. Факты и позицию заново придумывать не будем.</p>
+<section class="finish"><h2>Продолжение — в Telegram</h2><p>Сохрани результат урока и возвращайся в Telegram. Следующий шаг открывай только после того, как получил видимый результат текущего.</p><a class="telegram" href="https://t.me/im_zinchenko" target="_blank" rel="noopener">Открыть Telegram Игоря</a></section>
+</div></section>
+<footer class="footer">Контент-машина из войсов · рабочий материал Игоря Зинченко</footer>
+</article></main>
+<script>
+const decode = value => new TextDecoder().decode(Uint8Array.from(atob(value), c => c.charCodeAt(0)));
+async function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    try{ await navigator.clipboard.writeText(text); return; }catch(error){}
+  }
+  const area=document.createElement('textarea'); area.value=text; area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.focus(); area.select(); const copied=document.execCommand('copy'); area.remove(); if(!copied) throw new Error('copy failed');
+}
+document.querySelectorAll('.copy-button').forEach(button=>{
+  button.addEventListener('click', async()=>{
+    const shell=button.closest('[data-copy-block]'); const status=shell.querySelector('.copy-status');
+    try{ await copyText(decode(button.dataset.payload)); button.textContent='Скопировано'; status.textContent='Промпт в буфере — отправь его в чат.'; }
+    catch(error){ button.textContent='Не скопировано'; status.textContent='Выдели текст промпта вручную.'; }
+    setTimeout(()=>{button.textContent='Скопировать'; status.textContent='';},2400);
+  });
+});
+</script>
+</body></html>

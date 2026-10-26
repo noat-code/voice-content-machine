@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100c09">
+<title>Урок 1 из 4 · Редакторский фильтр — Контент-машина</title>
+<style>
+:root {
+  --ink-950:#100c09; --ink-900:#17110d; --umber-800:#281b13; --walnut:#3e2b1d;
+  --paper:#f2e8d8; --paper-2:#e6d8c3; --body:#30271f; --muted:#77695c;
+  --gold:#d5b06f; --gold-deep:#a67b3f; --cyan:#71d4dc; --line:rgba(68,45,27,.15);
+  --night-line:rgba(242,232,216,.12); --success:#7d9f82; --radius:26px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;color:var(--paper);font-family:var(--sans);line-height:1.7;background:radial-gradient(circle at 15% 0,rgba(166,123,63,.16),transparent 32rem),linear-gradient(180deg,#0d0a08,#17110d 52%,#0b0806)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+a{color:inherit}.topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--night-line);background:rgba(13,10,8,.83);backdrop-filter:blur(18px)}
+.topbar-inner{width:min(1120px,calc(100% - 28px));min-height:58px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.brand i{display:inline-block;width:7px;height:7px;margin-right:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px rgba(113,212,220,.6)}
+.lesson-nav{display:flex;gap:5px}.lesson-nav a{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--night-line);border-radius:50%;color:#a79787;text-decoration:none;font:700 12px var(--mono)}.lesson-nav a[aria-current="page"]{color:var(--ink-950);border-color:var(--gold);background:var(--gold)}
+.stage{width:min(1080px,calc(100% - 30px));margin:42px auto 90px}.workbook{overflow:hidden;border:1px solid var(--night-line);border-radius:32px;background:var(--ink-900);box-shadow:0 32px 100px rgba(0,0,0,.5)}
+.hero{position:relative;min-height:560px;display:flex;align-items:flex-end;overflow:hidden;background:#120e0b}.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,6,5,.05) 10%,rgba(8,6,5,.28) 52%,rgba(8,6,5,.96) 100%),linear-gradient(90deg,rgba(8,6,5,.78),rgba(8,6,5,.12) 72%)}
+.hero-copy{position:relative;z-index:1;max-width:760px;padding:56px}.eyebrow{margin:0 0 18px;color:var(--gold);font:800 11px var(--sans);letter-spacing:.2em;text-transform:uppercase}.hero h1{max-width:720px;margin:0 0 20px;font:500 clamp(44px,7vw,78px)/.98 var(--serif);letter-spacing:-.045em;text-wrap:balance}.hero-lead{max-width:650px;margin:0;color:#e3d8ca;font-size:18px;line-height:1.55;text-wrap:pretty}
+.progress{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:20px 42px;border-bottom:1px solid var(--line);color:var(--muted);background:var(--paper);font:800 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}.progress-track{height:3px;background:rgba(48,39,31,.12)}.progress-track span{display:block;height:100%;background:linear-gradient(90deg,var(--gold-deep),var(--cyan))}
+.paper{padding:70px clamp(24px,6vw,84px) 80px;color:var(--body);background:linear-gradient(180deg,#f3eadc,#ede1d0)}.paper-inner{max-width:760px;margin:auto}.result-card{display:grid;grid-template-columns:auto 1fr;gap:15px;margin:0 0 52px;padding:20px 22px;border-top:1px solid rgba(166,123,63,.35);border-bottom:1px solid rgba(166,123,63,.35);background:rgba(255,255,255,.22)}.result-card b{color:var(--gold-deep);font:800 11px var(--mono);letter-spacing:.12em;text-transform:uppercase}.result-card span{font-family:var(--serif);font-size:21px;line-height:1.3}
+.paper h2{margin:68px 0 22px;font:500 clamp(31px,5vw,48px)/1.06 var(--serif);letter-spacing:-.035em;text-wrap:balance}.paper h3{margin:38px 0 14px;font:700 21px/1.3 var(--sans)}.paper p{margin:0 0 18px}.paper ul,.paper ol{padding-left:24px;margin:0 0 24px}.paper li{margin:8px 0}.paper strong{color:#1e1712}.paper hr{height:1px;margin:54px 0;border:0;background:linear-gradient(90deg,transparent,rgba(166,123,63,.35),transparent)}.paper blockquote{margin:30px 0;padding:20px 24px;border:1px solid rgba(166,123,63,.25);border-radius:16px;background:rgba(166,123,63,.07);font-family:var(--serif);font-size:18px}.paper blockquote p:last-child{margin-bottom:0}
+.code-shell{margin:32px 0;border:1px solid rgba(113,212,220,.18);border-radius:18px;overflow:hidden;background:#0d1212;box-shadow:0 22px 55px rgba(31,21,14,.16)}.code-head{min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 10px 8px 18px;border-bottom:1px solid rgba(113,212,220,.12);color:#a8c4c4;font:800 10px var(--mono);letter-spacing:.12em;text-transform:uppercase}.copy-button{min-width:118px;min-height:40px;border:1px solid rgba(113,212,220,.32);border-radius:11px;color:#bceff1;background:rgba(113,212,220,.08);font:800 12px var(--sans);cursor:pointer}.copy-button:hover,.copy-button:focus-visible{background:rgba(113,212,220,.16);outline:2px solid rgba(113,212,220,.55);outline-offset:2px}.code-shell pre{max-height:600px;margin:0;padding:22px;overflow:auto;color:#d7e6e2;font:13px/1.7 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}.copy-status{min-height:0;padding:0 18px;color:#bceff1;font-size:12px}.copy-status:not(:empty){padding-top:8px;padding-bottom:12px}
+.finish{margin-top:70px;padding-top:34px;border-top:1px solid var(--line)}.finish h2{margin-top:0}.telegram{min-height:54px;display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:0 24px;border-radius:999px;color:#100c09;background:linear-gradient(135deg,var(--gold),#e3c88f);text-decoration:none;font-weight:850;box-shadow:0 12px 35px rgba(166,123,63,.22)}.telegram:hover,.telegram:focus-visible{transform:translateY(-1px);outline:2px solid var(--cyan);outline-offset:3px}.footer{padding:26px 42px;color:#938375;border-top:1px solid var(--night-line);font-size:12px;background:#100c09}
+@media(max-width:700px){.topbar-inner{min-height:62px;gap:8px}.brand{max-width:130px;font-size:8px;letter-spacing:.13em}.lesson-nav{gap:3px}.lesson-nav a{width:44px;height:44px}.stage{width:min(100% - 16px,1080px);margin:16px auto 46px}.workbook{border-radius:22px}.hero{min-height:510px}.hero-img{object-position:60% center}.hero:after{background:linear-gradient(180deg,rgba(8,6,5,.03),rgba(8,6,5,.35) 46%,rgba(8,6,5,.98) 82%),linear-gradient(90deg,rgba(8,6,5,.55),rgba(8,6,5,.1))}.hero-copy{padding:30px 24px 34px}.hero h1{font-size:43px}.hero-lead{font-size:16px}.progress{grid-template-columns:1fr auto;padding:18px 22px}.progress-track{grid-column:1/-1;grid-row:2}.paper{padding:48px 20px 58px}.result-card{grid-template-columns:1fr;gap:6px}.paper h2{margin-top:54px}.paper blockquote{padding:18px}.code-shell{margin-left:-8px;margin-right:-8px}.code-shell pre{font-size:12px;padding:18px;max-height:520px}.copy-button{min-height:44px}.footer{padding:22px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.telegram{transition:none}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand"><i></i>Зинченко · Контент-машина</div><nav class="lesson-nav" aria-label="Уроки"><a href="lesson-1-filter.html" aria-current="page">1</a><a href="lesson-2-voice-profile.html" aria-label="Урок 2">2</a><a href="lesson-3-voice-to-draft.html" aria-label="Урок 3">3</a><a href="lesson-4-platform-profile.html" aria-label="Урок 4">4</a></nav></div></header>
+<main class="stage"><article class="workbook">
+<section class="hero">
+<img class="hero-img" src="assets/lesson-1-hero.png" alt="" aria-hidden="true">
+<div class="hero-copy"><p class="eyebrow">Урок 1 из 4 · Редакторский фильтр</p><h1>Убрать ИИ-клей, не потеряв мысль</h1><p class="hero-lead">Один редакторский проход, который чистит штампы и сохраняет факты, позицию и оговорки автора.</p></div>
+</section>
+<div class="progress"><span>Маршрут курса</span><div class="progress-track" aria-label="Прогресс 25%"><span style="width:25%"></span></div><span>25%</span></div>
+<section class="paper"><div class="paper-inner">
+<div class="result-card"><b>Результат урока</b><span>Один очищенный черновик</span></div>
+<h2 id="_1">Зачем нужен этот шаг</h2>
+<p>Фильтр нужен не для того, чтобы «обмануть детектор». Детектор здесь вообще не главный.</p>
+<p>Проблема в другом: нейросеть часто обклеивает нормальную мысль штампами, канцеляритом, фальшивой значимостью и переходами ради переходов. Читатель продирается через этот клей и перестаёт слышать, что ты хотел сказать.</p>
+<p>После этого урока у тебя будет один очищенный старый черновик. Факты, цифры и позиция должны остаться на месте. Должны исчезнуть только слова, которые занимали место вместо мысли.</p>
+<p>Сразу ограничение: этот фильтр не добавляет авторский голос. Он может сделать текст стерильным, если применять запреты механически. Голос мы будем собирать отдельно, по твоим текстам, в следующем уроке.</p>
+<hr>
+<h2 id="_2">Было / Стало</h2>
+<blockquote>
+<p>Пример условный. Цифры и история выдуманы, чтобы показать разницу между двумя способами писать, а не выдать это за чей-то кейс.</p>
+</blockquote>
+<p><strong>БЫЛО (типичный ChatGPT)</strong></p>
+<p>В современном динамичном мире запуск собственного проекта - это не просто коммерческая инициатива, а настоящая школа жизни. В рамках первого запуска за три недели было получено двенадцать заявок с лендинга и ноль оплат. Сначала возникла гипотеза, что нужно модернизировать рекламные креативы, однако повторная итерация показала те же результаты: ещё двенадцать заявок и снова ноль оплат. Проблема заключалась в абстрактном позиционировании «системы для роста». После сокращения оффера до обещания сорокаминутного отчёта было получено восемь заявок и две оплаты. Этот опыт подтверждает важность чёткого ценностного предложения.</p>
+<p><strong>СТАЛО (после фильтра)</strong></p>
+<p>Первый запуск провалился за три недели. Собрали лендинг, настроили рекламу, получили двенадцать заявок и ни одной оплаты.</p>
+<p>Сначала решили, что дело в креативах. Поменяли креативы. Ещё двенадцать заявок, снова ноль.</p>
+<p>Проблема была не в рекламе. Продавали «систему для роста», а человек не понимал, что получит в понедельник утром.</p>
+<p>На втором заходе из оффера убрали всё, кроме одной фразы: за сорок минут собираем отчёт по рекламе. Получили восемь заявок и две оплаты.</p>
+<p><strong>Что изменилось.</strong> Факты есть в обоих вариантах: три недели, первый запуск - двенадцать заявок и ноль оплат, смена креативов - ещё двенадцать заявок и ноль оплат, затем смена оффера - восемь заявок и две оплаты. Во втором они не утоплены в абстракциях и канцелярите. Видно цепочку: что сделали, что получили, где ошиблись, что изменили. Это и нужно сохранить при чистке текста.</p>
+<hr>
+<h2 id="_3">Что именно фильтруем</h2>
+<p>В исходной базе 34 паттерна. Не нужно учить их как таблицу умножения и не нужно делать вид, что они все буквально перечислены в промпте ниже.</p>
+<p>В нём 15 рабочих проверок. Сначала он смотрит на конструкцию текста: одинаковый ритм, одинаковые начала предложений, переходы на каждом шве, фразы, которые можно переставить в любой чужой пост. Потом чистит слова: разгоны, канцелярит, нагнетание значимости и пустые выводы.</p>
+<p>Почему в таком порядке? Можно заменить все «важно подчеркнуть», но оставить ровный метроном из одинаковых фраз. Текст станет чище, но не перестанет звучать собранным по шаблону.</p>
+<p>Фильтр не обязан вырезать каждую метафору или каждое «важно». Он нужен, чтобы заметить повторяющуюся проблему и убрать её там, где она ничего не делает.</p>
+<hr>
+<h2 id="-">Промпт-фильтр</h2>
+<p>Скопируй целиком. Это отдельный редакторский проход, а не замена автору.</p>
+<div class="code-shell" data-copy-block>
+  <div class="code-head"><span>Готовый промпт</span><button class="copy-button" type="button" data-payload="0KLRiyAtINGB0YLRgNC+0LPQuNC5INGA0LXQtNCw0LrRgtC+0YAuINCf0LXRgNC10L/QuNGI0Lgg0YLQtdC60YHRgiDQvdC40LbQtSDRgtCw0LosINGH0YLQvtCx0Ysg0YfQuNGC0LDRgtC10LvRjCDQstC40LTQtdC7INC80YvRgdC70Ywg0LDQstGC0L7RgNCwLCDQsCDQvdC1INGC0LjQv9C+0LLQvtC5INCY0Jgt0LrQu9C10LkuINCh0LzRi9GB0LssINGE0LDQutGC0YssINGG0LjRhNGA0YssINC40LzQtdC90LAsINGG0LjRgtCw0YLRiyDQuCDQvdCw0LzQtdGA0LXQvdC90L4g0L/RgNC40LLQtdC00ZHQvdC90YvQtSDQv9GA0LjQvNC10YDRiyDRgdC+0YXRgNCw0L3QuCDQsdC10Lcg0LjQt9C80LXQvdC10L3QuNC5LiDQndC40YfQtdCz0L4g0L3QtSDQstGL0LTRg9C80YvQstCw0LkuINCV0YHQu9C4INC00LXRgtCw0LvQuCDQvdC1INGF0LLQsNGC0LDQtdGCLCDQvdC1INC00L7QsdCw0LLQu9GP0Lkg0LXRkSDRgNCw0LTQuCDQttC40LLQvtGB0YLQuC4KCtCg0LDQsdC+0YLQsNC5INCyINC00LLQsCDQv9GA0L7RhdC+0LTQsC4KCioq0J/RgNC+0YXQvtC0IDEuINCh0YLRgNGD0LrRgtGD0YDQsCoqCgoxLiDQoNC40YLQvC4g0JXRgdC70Lgg0YLRgNC4INC/0YDQtdC00LvQvtC20LXQvdC40Y8g0L/QvtC00YDRj9C0INC/0L7RhdC+0LbQuCDQv9C+INC00LvQuNC90LUsINGA0LDQt9Cx0LXQuSDQvtC00L3QviDQuNC70Lgg0YHQutC70LXQuSDQtNCy0LAuINCn0LXRgNC10LTRg9C5INC60L7RgNC+0YLQutC40LUsINGB0YDQtdC00L3QuNC1INC4INC00LvQuNC90L3Ri9C1INGE0YDQsNC30YsuCjIuINCd0LDRh9Cw0LvQsCDQv9GA0LXQtNC70L7QttC10L3QuNC5LiDQldGB0LvQuCDQsiDQsNCx0LfQsNGG0LUg0L/QvtCy0YLQvtGA0Y/QtdGC0YHRjyDQvtC00L3QviDQvdCw0YfQsNC70L4sINC/0LXRgNC10L/QuNGI0Lgg0YfQsNGB0YLRjCDQv9GA0LXQtNC70L7QttC10L3QuNC5LgozLiDQodGC0YvQutC4LiDQndC1INGB0YLQsNCy0Ywg0L/QtdGA0LXRhdC+0LQg0L3QsCDQutCw0LbQtNGL0Lkg0YjQvtCyOiDCq9Ca0YDQvtC80LUg0YLQvtCz0L7CuywgwqvQkdC+0LvQtdC1INGC0L7Qs9C+wrssIMKr0KLQsNC60LjQvCDQvtCx0YDQsNC30L7QvMK7LiDQmNC90L7Qs9C00LAg0YHQu9C10LTRg9GO0YnRg9GOINC80YvRgdC70Ywg0LvRg9GH0YjQtSDQvdCw0YfQsNGC0Ywg0YHRgNCw0LfRgy4KNC4g0KLQtdGB0YIg0L3QsCDQv9C10YDQtdC90L7RgdC40LzQvtGB0YLRjC4g0JXRgdC70Lgg0YTRgNCw0LfRgyDQvNC+0LbQvdC+INCx0LXQtyDQuNC30LzQtdC90LXQvdC40Lkg0LLRgdGC0LDQstC40YLRjCDQsiDRh9GD0LbQvtC5INC/0L7RgdGCLCDQstGL0YDQtdC20Ywg0LXRkSDQuNC70Lgg0YHQtNC10LvQsNC5INC60L7QvdC60YDQtdGC0L3QvtC5LgoKKirQn9GA0L7RhdC+0LQgMi4g0KHQu9C+0LLQsCoqCgo1LiDQo9Cx0LXRgNC4INGA0LDQt9Cz0L7QvdGLOiDCq9CyINGB0L7QstGA0LXQvNC10L3QvdC+0Lwg0LzQuNGA0LXCuywgwqvQvdC4INC00LvRjyDQutC+0LPQviDQvdC1INGB0LXQutGA0LXRgsK7LCDCq9C00LDQstCw0LnRgtC1INGA0LDQt9Cx0LXRgNGR0LzRgdGPwrsuINCd0LDRh9C40L3QsNC5INGBINGB0YPRgtC4Lgo2LiDQo9Cx0LXRgNC4INC70L7QttC90YvQtSDQv9GA0L7RgtC40LLQvtC/0L7RgdGC0LDQstC70LXQvdC40Y86IMKr0L3QtSDQv9GA0L7RgdGC0L4gWCwg0LAgWcK7LCDCq9GN0YLQviDQvdC1INC40L3RgdGC0YDRg9C80LXQvdGCLCDRjdGC0L4g0YTQuNC70L7RgdC+0YTQuNGPwrsuINCh0LrQsNC20Lgg0L/RgNGP0LzQviwg0YfRgtC+INC/0YDQvtC40LfQvtGI0LvQviDQuNC70Lgg0YfRgtC+INCy0LDQttC90L4uCjcuINCj0LHQtdGA0Lgg0LrQsNC90YbQtdC70Y/RgNC40YI6IMKr0Y/QstC70Y/QtdGC0YHRj8K7LCDCq9C+0YHRg9GJ0LXRgdGC0LLQu9GP0LXRgtGB0Y/CuywgwqvRgdC70LXQtNGD0LXRgiDQvtGC0LzQtdGC0LjRgtGMwrssIMKr0LLQsNC20L3QviDQv9C+0LTRh9C10YDQutC90YPRgtGMwrssIMKr0LIg0YDQsNC80LrQsNGFwrssIMKr0LTQsNC90L3Ri9C5wrsuINCX0LDQvNC10L3QuCDQtdCz0L4g0L3QvtGA0LzQsNC70YzQvdGL0LzQuCDQs9C70LDQs9C+0LvQsNC80LguCjguINCg0LDQt9Cx0LXQuSDRhtC10L/QvtGH0LrQuCDRgNC+0LTQuNGC0LXQu9GM0L3QvtCz0L4g0L/QsNC00LXQttCwOiDCq9C/0YDQvtGG0LXRgdGBINC/0L7QstGL0YjQtdC90LjRjyDQutCw0YfQtdGB0YLQstCwINC+0LHRgdC70YPQttC40LLQsNC90LjRjyDQutC70LjQtdC90YLQvtCywrsg0L/RgNC10LLRgNCw0YLQuCDQsiDQv9C+0L3Rj9GC0L3QvtC1IMKr0LrRgtC+INGH0YLQviDQtNC10LvQsNC10YLCuy4KOS4g0KPQsdC10YDQuCDQstGL0LLQvtC00Yst0L/Rg9GB0YLRi9GI0LrQuDogwqvQstGA0LXQvNGPINC/0L7QutCw0LbQtdGCwrssIMKr0L7RgdGC0LDRkdGC0YHRjyDQu9C40YjRjCDQvdCw0LHQu9GO0LTQsNGC0YzCuywgwqvQsiDQt9Cw0LrQu9GO0YfQtdC90LjQtSDRhdC+0YfQtdGC0YHRjyDRgdC60LDQt9Cw0YLRjMK7LiDQl9Cw0LrQvtC90YfQuCDQvNGL0YHQu9GMINC/0L4g0LTQtdC70YMuCjEwLiDQo9Cx0LXRgNC4INC90LDQs9C90LXRgtCw0L3QuNC1INC30L3QsNGH0LjQvNC+0YHRgtC4OiDCq9C60LvRjtGH0LXQstC+0LnCuywgwqvRg9C90LjQutCw0LvRjNC90YvQucK7LCDCq9GA0LXQstC+0LvRjtGG0LjQvtC90L3Ri9C5wrssIMKr0LHQtdGB0L/RgNC10YbQtdC00LXQvdGC0L3Ri9C5wrssINC10YHQu9C4INGA0Y/QtNC+0Lwg0L3QtdGCINGE0LDQutGC0LAsINC60L7RgtC+0YDRi9C5INGN0YLQviDQtNC+0LrQsNC30YvQstCw0LXRgi4KMTEuINCf0LXRgNC10YTQvtGA0LzRg9C70LjRgNGD0Lkg0LHRg9C60LLQsNC70YzQvdC+INC60L7QvdGB0YLRgNGD0LrRhtC40LgsINCz0LTQtSDQvdC10LbQuNCy0L7QtSDQtNC10LvQsNC10YIg0LbQuNCy0L7QtTogwqvQtNCw0L3QvdGL0LUg0LPQvtCy0L7RgNGP0YLCuywgwqvRgNGL0L3QvtC6INC90LDQutCw0LfRi9Cy0LDQtdGCwrsuINCU0LXQudGB0YLQstGD0Y7RidC10LUg0LvQuNGG0L4g0L3QsNC30YvQstCw0Lkg0YLQvtC70YzQutC+INC10YHQu9C4INC+0L3QviDQtdGB0YLRjCDQsiDQuNGB0YXQvtC00L3QuNC60LU7INC40L3QsNGH0LUg0L3QtSDQtNC+0LHQsNCy0LvRj9C5LgoxMi4g0J3QtSDQv9C+0LTQvNC10L3Rj9C5INGD0YLQstC10YDQttC00LXQvdC40LUg0LzQtdGC0LDRhNC+0YDQvtC5LCDQtdGB0LvQuCDQtdCz0L4g0LzQvtC20L3QviDRgdC60LDQt9Cw0YLRjCDQsdGD0LrQstCw0LvRjNC90L4uCjEzLiDQo9Cx0LXRgNC4INC+0LHQvtCx0YnQtdC90LjRjyDQsdC10Lcg0LjRgdGC0L7Rh9C90LjQutCwOiDCq9GN0LrRgdC/0LXRgNGC0Ysg0YHRh9C40YLQsNGO0YLCuywgwqvQvNC90L7Qs9C40LUg0YHRhdC+0LTRj9GC0YHRjyDQstC+INC80L3QtdC90LjQuMK7LiDQndCw0LfQvtCy0Lgg0LjRgdGC0L7Rh9C90LjQuiDQuNC70Lgg0LLRi9GA0LXQttGMLgoxNC4g0KPQsdC10YDQuCDRh9Cw0YIt0LDRgNGC0LXRhNCw0LrRgtGLOiDCq9Ca0L7QvdC10YfQvdC+IcK7LCDCq9Ce0YLQu9C40YfQvdGL0Lkg0LLQvtC/0YDQvtGBwrssIMKr0J3QsNC00LXRjtGB0YwsINGN0YLQviDQv9C+0LzQvtCz0LvQvsK7LgoxNS4g0J3QtSDQuNGB0L/QvtC70YzQt9GD0Lkg0LTQu9C40L3QvdC+0LUg0YLQuNGA0LUsIMKr0YPQvNC90YvQtcK7INC60LDQstGL0YfQutC4INC4INC/0L7Qu9GD0LbQuNGA0L3QvtC1INCyINC60LDQttC00L7QvCDQsNCx0LfQsNGG0LUuCgoqKtCf0YDQvtCy0LXRgNC60LAg0L/QtdGA0LXQtCDQstGL0LTQsNGH0LXQuSoqCgotINCn0YLQviDQtdGJ0ZEg0LLRi9C00LDRkdGCINC90LXQudGA0L7RgdC10YLRjD8g0J3QsNC30L7QstC4INC4INC40YHQv9GA0LDQstGMLiDQldGB0LvQuCDQvdC40YfQtdCz0L4gLSDRgdC60LDQttC4INC/0YDRj9C80L4sINC90LUg0LjRidC4INC/0YDQvtCx0LvQtdC80YMg0YDQsNC00Lgg0LPQsNC70L7Rh9C60LguCi0g0J/QvtGP0LLQuNC70YHRjyDQu9C4INGE0LDQutGCLCDRhtC40YTRgNCwLCDQuNC80Y8sINC00LDRgtCwINC40LvQuCDRhtC40YLQsNGC0LAsINC60L7RgtC+0YDRi9GFINC90LUg0LHRi9C70L4g0LIg0LjRgdGF0L7QtNC90LjQutC1PyDQldGB0LvQuCDQtNCwLCDRg9Cx0LXRgNC4LgotINCd0LUg0YHRgtCw0Lsg0LvQuCDRgtC10LrRgdGCINGB0YLQtdGA0LjQu9GM0L3Ri9C8PyDQpNC40LvRjNGC0YAg0L3QtSDQtNC+0LHQsNCy0LvRj9C10YIg0LPQvtC70L7RgS4g0JXRgdC70Lgg0LLQvNC10YHRgtC1INGBINCy0L7QtNC+0Lkg0YHQvNGL0LvQviDQv9C+0LfQuNGG0LjRjiDQsNCy0YLQvtGA0LAsINCy0LXRgNC90Lgg0LXRkSDRgtC+0LvRjNC60L4g0LjQtyDQuNGB0YXQvtC00L3QuNC60LAuCgoqKtCk0L7RgNC80LDRgiDQvtGC0LLQtdGC0LAg0L/QvtGB0LvQtSDQv9C+0LvRg9GH0LXQvdC40Y8g0YLQtdC60YHRgtCwKioKCjEuINCT0L7RgtC+0LLRi9C5INGC0LXQutGB0YIuCjIuINCa0L7RgNC+0YLQutC40Lkg0YHQv9C40YHQvtC6INGC0L7Qs9C+LCDRh9GC0L4g0LjQt9C80LXQvdC40LsuCgrQrdGC0L4g0YHQvtC+0LHRidC10L3QuNC1IC0g0YLQvtC70YzQutC+INC40L3RgdGC0YDRg9C60YbQuNGPLiDQlNC+0LbQtNC40YHRjCDRgdC70LXQtNGD0Y7RidC10LPQviDRgdC+0L7QsdGJ0LXQvdC40Y8g0YEg0YfQtdGA0L3QvtCy0LjQutC+0Lwg0Lgg0L3QtSDQvdCw0YfQuNC90LDQuSDRgNC10LTQsNC60YLQuNGA0L7QstCw0L3QuNC1INC00L4g0LXQs9C+INC/0L7Qu9GD0YfQtdC90LjRjy4KCg==">Скопировать</button></div>
+  <pre><code>Ты - строгий редактор. Перепиши текст ниже так, чтобы читатель видел мысль автора, а не типовой ИИ-клей. Смысл, факты, цифры, имена, цитаты и намеренно приведённые примеры сохрани без изменений. Ничего не выдумывай. Если детали не хватает, не добавляй её ради живости.
+
+Работай в два прохода.
+
+**Проход 1. Структура**
+
+1. Ритм. Если три предложения подряд похожи по длине, разбей одно или склей два. Чередуй короткие, средние и длинные фразы.
+2. Начала предложений. Если в абзаце повторяется одно начало, перепиши часть предложений.
+3. Стыки. Не ставь переход на каждый шов: «Кроме того», «Более того», «Таким образом». Иногда следующую мысль лучше начать сразу.
+4. Тест на переносимость. Если фразу можно без изменений вставить в чужой пост, вырежь её или сделай конкретной.
+
+**Проход 2. Слова**
+
+5. Убери разгоны: «в современном мире», «ни для кого не секрет», «давайте разберёмся». Начинай с сути.
+6. Убери ложные противопоставления: «не просто X, а Y», «это не инструмент, это философия». Скажи прямо, что произошло или что важно.
+7. Убери канцелярит: «является», «осуществляется», «следует отметить», «важно подчеркнуть», «в рамках», «данный». Замени его нормальными глаголами.
+8. Разбей цепочки родительного падежа: «процесс повышения качества обслуживания клиентов» преврати в понятное «кто что делает».
+9. Убери выводы-пустышки: «время покажет», «остаётся лишь наблюдать», «в заключение хочется сказать». Закончи мысль по делу.
+10. Убери нагнетание значимости: «ключевой», «уникальный», «революционный», «беспрецедентный», если рядом нет факта, который это доказывает.
+11. Переформулируй буквально конструкции, где неживое делает живое: «данные говорят», «рынок наказывает». Действующее лицо называй только если оно есть в исходнике; иначе не добавляй.
+12. Не подменяй утверждение метафорой, если его можно сказать буквально.
+13. Убери обобщения без источника: «эксперты считают», «многие сходятся во мнении». Назови источник или вырежь.
+14. Убери чат-артефакты: «Конечно!», «Отличный вопрос», «Надеюсь, это помогло».
+15. Не используй длинное тире, «умные» кавычки и полужирное в каждом абзаце.
+
+**Проверка перед выдачей**
+
+- Что ещё выдаёт нейросеть? Назови и исправь. Если ничего - скажи прямо, не ищи проблему ради галочки.
+- Появился ли факт, цифра, имя, дата или цитата, которых не было в исходнике? Если да, убери.
+- Не стал ли текст стерильным? Фильтр не добавляет голос. Если вместе с водой смыло позицию автора, верни её только из исходника.
+
+**Формат ответа после получения текста**
+
+1. Готовый текст.
+2. Короткий список того, что изменил.
+
+Это сообщение - только инструкция. Дождись следующего сообщения с черновиком и не начинай редактирование до его получения.
+
+</code></pre>
+  <div class="copy-status" aria-live="polite"></div>
+</div>
+<hr>
+<h2 id="_4">Как применить и проверить результат</h2>
+<ol>
+<li>Отправь в чат весь промпт из блока выше одним сообщением.</li>
+<li>Следующим сообщением отправь один старый черновик. Не пиши новый специально для упражнения. Если у агента есть постоянные инструкции, фильтр можно положить туда. Тогда убери из него пункт про список изменений, если не хочешь получать этот отчёт каждый раз.</li>
+<li>Сравни исходник и результат по трём вопросам:
+   - все ли факты, цифры, имена и цитаты на месте;
+   - исчезли ли штампы и пустые связки;
+   - не пропала ли твоя позиция вместе с водой.</li>
+</ol>
+<p>Если после фильтра ты переписываешь текст полностью, не дави ещё сильнее списком запретов. Скорее всего, ему не хватает следующего слоя - твоего Voice Profile.</p>
+<p>Твой видимый результат сейчас простой: один очищенный черновик и понимание, какие конструкции у тебя повторяются чаще всего.</p>
+<p>После платформенной адаптации в Уроке 4 вернись к этому фильтру ещё раз: это последний редакторский проход перед ручной проверкой.</p>
+<hr>
+<h2 id="_5">Что дальше</h2>
+<p>Фильтр убирает чужой шум, но не отвечает на вопрос, как должен звучать именно ты.</p>
+<p>В Уроке 2 соберём Voice Profile по твоим текстам: не «пиши живо и дерзко», а набор наблюдаемых правил, которые можно проверить и поправить.</p>
+<section class="finish"><h2>Продолжение — в Telegram</h2><p>Сохрани результат урока и возвращайся в Telegram. Следующий шаг открывай только после того, как получил видимый результат текущего.</p><a class="telegram" href="https://t.me/im_zinchenko" target="_blank" rel="noopener">Открыть Telegram Игоря</a></section>
+</div></section>
+<footer class="footer">Контент-машина из войсов · рабочий материал Игоря Зинченко</footer>
+</article></main>
+<script>
+const decode = value => new TextDecoder().decode(Uint8Array.from(atob(value), c => c.charCodeAt(0)));
+async function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    try{ await navigator.clipboard.writeText(text); return; }catch(error){}
+  }
+  const area=document.createElement('textarea'); area.value=text; area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.focus(); area.select(); const copied=document.execCommand('copy'); area.remove(); if(!copied) throw new Error('copy failed');
+}
+document.querySelectorAll('.copy-button').forEach(button=>{
+  button.addEventListener('click', async()=>{
+    const shell=button.closest('[data-copy-block]'); const status=shell.querySelector('.copy-status');
+    try{ await copyText(decode(button.dataset.payload)); button.textContent='Скопировано'; status.textContent='Промпт в буфере — отправь его в чат.'; }
+    catch(error){ button.textContent='Не скопировано'; status.textContent='Выдели текст промпта вручную.'; }
+    setTimeout(()=>{button.textContent='Скопировать'; status.textContent='';},2400);
+  });
+});
+</script>
+</body></html>

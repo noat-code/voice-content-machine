@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100c09">
+<title>Урок 2 из 4 · Голос автора — Контент-машина</title>
+<style>
+:root {
+  --ink-950:#100c09; --ink-900:#17110d; --umber-800:#281b13; --walnut:#3e2b1d;
+  --paper:#f2e8d8; --paper-2:#e6d8c3; --body:#30271f; --muted:#77695c;
+  --gold:#d5b06f; --gold-deep:#a67b3f; --cyan:#71d4dc; --line:rgba(68,45,27,.15);
+  --night-line:rgba(242,232,216,.12); --success:#7d9f82; --radius:26px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;color:var(--paper);font-family:var(--sans);line-height:1.7;background:radial-gradient(circle at 15% 0,rgba(166,123,63,.16),transparent 32rem),linear-gradient(180deg,#0d0a08,#17110d 52%,#0b0806)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+a{color:inherit}.topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--night-line);background:rgba(13,10,8,.83);backdrop-filter:blur(18px)}
+.topbar-inner{width:min(1120px,calc(100% - 28px));min-height:58px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.brand i{display:inline-block;width:7px;height:7px;margin-right:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px rgba(113,212,220,.6)}
+.lesson-nav{display:flex;gap:5px}.lesson-nav a{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--night-line);border-radius:50%;color:#a79787;text-decoration:none;font:700 12px var(--mono)}.lesson-nav a[aria-current="page"]{color:var(--ink-950);border-color:var(--gold);background:var(--gold)}
+.stage{width:min(1080px,calc(100% - 30px));margin:42px auto 90px}.workbook{overflow:hidden;border:1px solid var(--night-line);border-radius:32px;background:var(--ink-900);box-shadow:0 32px 100px rgba(0,0,0,.5)}
+.hero{position:relative;min-height:560px;display:flex;align-items:flex-end;overflow:hidden;background:#120e0b}.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,6,5,.05) 10%,rgba(8,6,5,.28) 52%,rgba(8,6,5,.96) 100%),linear-gradient(90deg,rgba(8,6,5,.78),rgba(8,6,5,.12) 72%)}
+.hero-copy{position:relative;z-index:1;max-width:760px;padding:56px}.eyebrow{margin:0 0 18px;color:var(--gold);font:800 11px var(--sans);letter-spacing:.2em;text-transform:uppercase}.hero h1{max-width:720px;margin:0 0 20px;font:500 clamp(44px,7vw,78px)/.98 var(--serif);letter-spacing:-.045em;text-wrap:balance}.hero-lead{max-width:650px;margin:0;color:#e3d8ca;font-size:18px;line-height:1.55;text-wrap:pretty}
+.progress{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:20px 42px;border-bottom:1px solid var(--line);color:var(--muted);background:var(--paper);font:800 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}.progress-track{height:3px;background:rgba(48,39,31,.12)}.progress-track span{display:block;height:100%;background:linear-gradient(90deg,var(--gold-deep),var(--cyan))}
+.paper{padding:70px clamp(24px,6vw,84px) 80px;color:var(--body);background:linear-gradient(180deg,#f3eadc,#ede1d0)}.paper-inner{max-width:760px;margin:auto}.result-card{display:grid;grid-template-columns:auto 1fr;gap:15px;margin:0 0 52px;padding:20px 22px;border-top:1px solid rgba(166,123,63,.35);border-bottom:1px solid rgba(166,123,63,.35);background:rgba(255,255,255,.22)}.result-card b{color:var(--gold-deep);font:800 11px var(--mono);letter-spacing:.12em;text-transform:uppercase}.result-card span{font-family:var(--serif);font-size:21px;line-height:1.3}
+.paper h2{margin:68px 0 22px;font:500 clamp(31px,5vw,48px)/1.06 var(--serif);letter-spacing:-.035em;text-wrap:balance}.paper h3{margin:38px 0 14px;font:700 21px/1.3 var(--sans)}.paper p{margin:0 0 18px}.paper ul,.paper ol{padding-left:24px;margin:0 0 24px}.paper li{margin:8px 0}.paper strong{color:#1e1712}.paper hr{height:1px;margin:54px 0;border:0;background:linear-gradient(90deg,transparent,rgba(166,123,63,.35),transparent)}.paper blockquote{margin:30px 0;padding:20px 24px;border:1px solid rgba(166,123,63,.25);border-radius:16px;background:rgba(166,123,63,.07);font-family:var(--serif);font-size:18px}.paper blockquote p:last-child{margin-bottom:0}
+.code-shell{margin:32px 0;border:1px solid rgba(113,212,220,.18);border-radius:18px;overflow:hidden;background:#0d1212;box-shadow:0 22px 55px rgba(31,21,14,.16)}.code-head{min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 10px 8px 18px;border-bottom:1px solid rgba(113,212,220,.12);color:#a8c4c4;font:800 10px var(--mono);letter-spacing:.12em;text-transform:uppercase}.copy-button{min-width:118px;min-height:40px;border:1px solid rgba(113,212,220,.32);border-radius:11px;color:#bceff1;background:rgba(113,212,220,.08);font:800 12px var(--sans);cursor:pointer}.copy-button:hover,.copy-button:focus-visible{background:rgba(113,212,220,.16);outline:2px solid rgba(113,212,220,.55);outline-offset:2px}.code-shell pre{max-height:600px;margin:0;padding:22px;overflow:auto;color:#d7e6e2;font:13px/1.7 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}.copy-status{min-height:0;padding:0 18px;color:#bceff1;font-size:12px}.copy-status:not(:empty){padding-top:8px;padding-bottom:12px}
+.finish{margin-top:70px;padding-top:34px;border-top:1px solid var(--line)}.finish h2{margin-top:0}.telegram{min-height:54px;display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:0 24px;border-radius:999px;color:#100c09;background:linear-gradient(135deg,var(--gold),#e3c88f);text-decoration:none;font-weight:850;box-shadow:0 12px 35px rgba(166,123,63,.22)}.telegram:hover,.telegram:focus-visible{transform:translateY(-1px);outline:2px solid var(--cyan);outline-offset:3px}.footer{padding:26px 42px;color:#938375;border-top:1px solid var(--night-line);font-size:12px;background:#100c09}
+@media(max-width:700px){.topbar-inner{min-height:62px;gap:8px}.brand{max-width:130px;font-size:8px;letter-spacing:.13em}.lesson-nav{gap:3px}.lesson-nav a{width:44px;height:44px}.stage{width:min(100% - 16px,1080px);margin:16px auto 46px}.workbook{border-radius:22px}.hero{min-height:510px}.hero-img{object-position:60% center}.hero:after{background:linear-gradient(180deg,rgba(8,6,5,.03),rgba(8,6,5,.35) 46%,rgba(8,6,5,.98) 82%),linear-gradient(90deg,rgba(8,6,5,.55),rgba(8,6,5,.1))}.hero-copy{padding:30px 24px 34px}.hero h1{font-size:43px}.hero-lead{font-size:16px}.progress{grid-template-columns:1fr auto;padding:18px 22px}.progress-track{grid-column:1/-1;grid-row:2}.paper{padding:48px 20px 58px}.result-card{grid-template-columns:1fr;gap:6px}.paper h2{margin-top:54px}.paper blockquote{padding:18px}.code-shell{margin-left:-8px;margin-right:-8px}.code-shell pre{font-size:12px;padding:18px;max-height:520px}.copy-button{min-height:44px}.footer{padding:22px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.telegram{transition:none}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand"><i></i>Зинченко · Контент-машина</div><nav class="lesson-nav" aria-label="Уроки"><a href="lesson-1-filter.html" aria-label="Урок 1">1</a><a href="lesson-2-voice-profile.html" aria-current="page">2</a><a href="lesson-3-voice-to-draft.html" aria-label="Урок 3">3</a><a href="lesson-4-platform-profile.html" aria-label="Урок 4">4</a></nav></div></header>
+<main class="stage"><article class="workbook">
+<section class="hero">
+<img class="hero-img" src="assets/lesson-2-hero.png" alt="" aria-hidden="true">
+<div class="hero-copy"><p class="eyebrow">Урок 2 из 4 · Голос автора</p><h1>Собрать Voice Profile, который можно проверить</h1><p class="hero-lead">Не «пиши живо», а конкретные правила: как ты думаешь, споришь, объясняешь и где проходит граница фальши.</p></div>
+</section>
+<div class="progress"><span>Маршрут курса</span><div class="progress-track" aria-label="Прогресс 50%"><span style="width:50%"></span></div><span>50%</span></div>
+<section class="paper"><div class="paper-inner">
+<div class="result-card"><b>Результат урока</b><span>Сохранённый Voice Profile v1</span></div>
+<h2 id="_1">Зачем нужен этот шаг</h2>
+<p>В новом чате нейросеть не знает, где ты делаешь паузу, как споришь, что считаешь пошлостью и как объясняешь сложное. Если каждый раз писать «сделай живо, дерзко и по-человечески», модель будет угадывать. Иногда попадёт. Чаще выдаст среднюю температуру по интернету.</p>
+<p>Voice Profile нужен, чтобы не объяснять одни и те же особенности заново. Это не описание личности и не магический промпт. Это сохранённый набор наблюдаемых правил, по которым можно проверить черновик и понять, что в нём не твоё.</p>
+<p>Сразу ограничение: профиль не снимается навсегда. Он уточняется на реальных правках. А если у тебя пока нет текстов, мы не можем честно доказать твой голос. Можно собрать только профиль предпочтений v1 и проверить его на практике.</p>
+<hr>
+<h2 id="_2">Почему «пиши дерзко» не инструкция</h2>
+<p>«Пиши дерзко», «добавь юмор», «будь экспертом» звучит понятно, пока не просишь модель сделать это.</p>
+<p>Для тебя «дерзко» может означать коротко спорить с плохим решением. Для неё - накидать громких слов. С юмором та же история.</p>
+<p>Это как сказать повару: «Сделай вкусно». Он не знает, сколько соли, нужна ли кислота и что ты вообще не ешь острое.</p>
+<p>С текстом механизм тот же. Вместо оценки нужны параметры: как начинается мысль, насколько прямой тон, где допустима ирония, какие слова и приёмы нельзя использовать. Тогда модель не читает твои мысли, а следует правилам, которые ты можешь поправить.</p>
+<hr>
+<h2 id="_3">Что остаётся одним, а что зависит от задачи</h2>
+<p>Voice Profile не заменяет правила площадки.</p>
+<p>В нём остаётся ядро: способ думать, привычная прямота, отношение к читателю, ритм, словарь, границы юмора. Но не надо делать вид, что один и тот же текст одинаково звучит везде. Подача, длина, часть интонации и следующий шаг меняются под задачу, контекст и аудиторию.</p>
+<p>Поэтому сейчас не собираем отдельный характер для Telegram, Instagram и статьи. Мы фиксируем основу. Требования конкретного формата разберём отдельно в Уроке 4.</p>
+<hr>
+<h2 id="_4">Две честные ветки</h2>
+<h3 id="_5">Ветка А. У тебя есть тексты</h3>
+<p>Возьми не весь канал, а материал, по которому можно увидеть повторения:</p>
+<p>• 3-5 текстов, которые ты считаешь «максимально я»;
+• 2-3 примера «точно не так»;
+• короткий комментарий: что в обычной подаче важно сохранить, а что было особенностью конкретного формата.</p>
+<p>Агент ищет не красивые формулировки, а повторяющиеся правила. Если приём встретился один раз, это может быть случайность. Если он повторился минимум в двух-трёх текстах, его уже можно считать паттерном и проверить в следующем черновике.</p>
+<p>Если у тебя есть только 1-2 своих текста или нет примеров «точно не так», не ищи недостающие специально. Используй имеющиеся тексты только как гипотезы и пройди пять вопросов ветки Б. На выходе будет Voice Profile v1, то есть профиль предпочтений, а не доказанный голос.</p>
+<h3 id="_6">Ветка Б. Текстов нет или их недостаточно</h3>
+<p>Тут не нужно притворяться, будто голос уже «снят». Ты отвечаешь на пять вопросов про тон, прямоту, юмор, способ объяснять и запреты. Если прислал 1-2 текста, они остаются гипотезами рядом с ответами. На выходе получаешь Voice Profile v1, то есть профиль предпочтений.</p>
+<p>Он полезен как стартовая настройка, но не как доказательство голоса. После первых черновиков ты увидишь, где сказал «хочу прямо», а на деле режешь слишком жёсткие фразы, или наоборот. Эти правки и превратят первую версию в рабочую.</p>
+<p>Ни в одной ветке не нужно заполнять пробелы выдуманными историями, цифрами и кейсами. Нет фактуры - остаётся вопрос или пометка о гипотезе.</p>
+<hr>
+<h2 id="-voice-profile">Промпт-экстрактор Voice Profile</h2>
+<p>Скопируй целиком. Сначала он спросит, какую ветку выбрать, и только потом попросит материалы.</p>
+<div class="code-shell" data-copy-block>
+  <div class="code-head"><span>Готовый промпт</span><button class="copy-button" type="button" data-payload="0KLRiyAtINGA0LXQtNCw0LrRgtC+0YAt0LjRgdGB0LvQtdC00L7QstCw0YLQtdC70YwuINCi0LLQvtGPINC30LDQtNCw0YfQsDog0YHQvtCx0YDQsNGC0YwgVm9pY2UgUHJvZmlsZSDQsNCy0YLQvtGA0LAsINGC0L4g0LXRgdGC0Ywg0YDQsNCx0L7Rh9C40Lkg0L3QsNCx0L7RgCDQv9GA0LDQstC40LssINC/0L4g0LrQvtGC0L7RgNC+0LzRgyDQv9C+0YLQvtC8INC80L7QttC90L4g0L/QuNGB0LDRgtGMINGC0LXQutGB0YIsINC90LUg0YLQtdGA0Y/RjyDRg9C30L3QsNCy0LDQtdC80YvQuSDRgdC/0L7RgdC+0LEg0LTRg9C80LDRgtGMINC4INC30LLRg9GH0LDRgtGMLgoK0J3QtSDQstGL0LTRg9C80YvQstCw0Lkg0YTQsNC60YLRiywg0LjRgdGC0L7RgNC40LgsINC+0L/Ri9GCLCDQv9C+0LfQuNGG0LjRjiwg0YbQuNGE0YDRiyDQuNC70Lgg0LrQtdC50YHRiyDQsNCy0YLQvtGA0LAuINCV0YHQu9C4INC00LDQvdC90YvRhSDQvdC1INGF0LLQsNGC0LDQtdGCLCDQt9Cw0LTQsNC5INCy0L7Qv9GA0L7RgSDQuNC70Lgg0L/QvtC80LXRgtGMINGN0YLQviDQutCw0Log0LPQuNC/0L7RgtC10LfRgy4g0J3QtSDQvdCw0LfRi9Cy0LDQuSDQv9GA0LXQtNC/0L7Qu9C+0LbQtdC90LjQtSDQv9C+0LTRgtCy0LXRgNC20LTRkdC90L3Ri9C8INC/0LDRgtGC0LXRgNC90L7QvC4KCtCh0L3QsNGH0LDQu9CwINGB0L/RgNC+0YHQuCwg0LrQsNC60YPRjiDQstC10YLQutGDINCy0YvQsdGA0LDRgtGMLiDQndC1INGB0L7QsdC40YDQsNC5INC/0YDQvtGE0LjQu9GMINC30LDRgNCw0L3QtdC1INC4INC90LUg0L/QvtC60LDQt9GL0LLQsNC5INGI0LDQsdC70L7QvSwg0L/QvtC60LAg0L3QtSDQv9C+0LvRg9GH0LjRiNGMINC80LDRgtC10YDQuNCw0LvRiyDQuNC70Lgg0L7RgtCy0LXRgtGLLgoK0JAgLSDRgyDQsNCy0YLQvtGA0LAg0LXRgdGC0Ywg0LPQvtGC0L7QstGL0LUg0YLQtdC60YHRgtGLLgrQkSAtINGC0LXQutGB0YLQvtCyINC90LXRgiwg0YHQvtCx0LjRgNCw0LXQvCDQv9GA0L7RhNC40LvRjCDQv9GA0LXQtNC/0L7Rh9GC0LXQvdC40LkgdjEuCgrQldGB0LvQuCDRgyDQsNCy0YLQvtGA0LAg0YLQvtC70YzQutC+IDEtMiDRgdC+0LHRgdGC0LLQtdC90L3Ri9GFINGC0LXQutGB0YLQsCDQuNC70Lgg0L3QtdGCINC/0YDQuNC80LXRgNC+0LIgwqvRgtC+0YfQvdC+INC90LUg0YLQsNC6wrssINC90LUg0L/RgNC+0YHQuCDQuNGB0LrQsNGC0Ywg0L3QtdC00L7RgdGC0LDRjtGJ0LjQtS4g0JjRgdC/0L7Qu9GM0LfRg9C5INC40LzQtdGO0YnQuNC10YHRjyDRgtC10LrRgdGC0Ysg0YLQvtC70YzQutC+INC60LDQuiDQs9C40L/QvtGC0LXQt9GLLCDQt9Cw0YLQtdC8INC30LDQtNCw0Lkg0L/Rj9GC0Ywg0LLQvtC/0YDQvtGB0L7QsiDQstC10YLQutC4INCRLiDQoNC10LfRg9C70YzRgtCw0YIg0L3QsNC30L7QstC4IFZvaWNlIFByb2ZpbGUgdjEgLyDQv9GA0L7RhNC40LvRjCDQv9GA0LXQtNC/0L7Rh9GC0LXQvdC40LksINCwINC90LUg0LTQvtC60LDQt9Cw0L3QvdGL0Lwg0LPQvtC70L7RgdC+0LwuCgojIyDQktC10YLQutCwINCQLiDQldGB0YLRjCDRgtC10LrRgdGC0YsKCjEuINCf0L7Qv9GA0L7RgdC4IDMtNSDRgtC10LrRgdGC0L7Qsiwg0LrQvtGC0L7RgNGL0LUg0LDQstGC0L7RgCDRgdGH0LjRgtCw0LXRgiDCq9C80LDQutGB0LjQvNCw0LvRjNC90L4g0Y/CuywgMi0zINC/0YDQuNC80LXRgNCwIMKr0YLQvtGH0L3QviDQvdC1INGC0LDQusK7INC4INC60L7RgNC+0YLQutC40Lkg0LrQvtC80LzQtdC90YLQsNGA0LjQuTog0YfRgtC+INC40Lcg0L7QsdGL0YfQvdC+0Lkg0L/QvtC00LDRh9C4INC90YPQttC90L4g0YHQvtGF0YDQsNC90LjRgtGMLCDQsCDRh9GC0L4g0LfQsNCy0LjRgdC40YIg0L7RgiDQutC+0L3QutGA0LXRgtC90L7Qs9C+INGE0L7RgNC80LDRgtCwLgoyLiDQoNCw0LfQsdC10YDQuCDRgtC10LrRgdGC0Ysg0LrQsNC6INC80LDRgtC10YDQuNCw0Lsg0LTQu9GPINC90LDQsdC70Y7QtNC10L3QuNGPOiDRgSDRh9C10LPQviDQvtCx0YvRh9C90L4g0L3QsNGH0LjQvdCw0LXRgtGB0Y8g0LzRi9GB0LvRjDsg0LrQsNC6INC+0L3QsCDQtNCy0LjQttC10YLRgdGPOyDQs9C00LUg0LDQstGC0L7RgCDRgdC/0L7RgNC40YIg0LjQu9C4INGB0L7QvNC90LXQstCw0LXRgtGB0Y87INC60LDQutC+0Lkg0YMg0L3QtdCz0L4g0YDQuNGC0Lw7INC60LDQutC40LUg0YHQu9C+0LLQsCwg0L/RgNC40ZHQvNGLINC4INC30LDQv9GA0LXRgtGLINC/0L7QstGC0L7RgNGP0Y7RgtGB0Y87INC60LDQuiDQstGL0LPQu9GP0LTQuNGCINC40YDQvtC90LjRjzsg0LrQsNC6INC+0L0g0LfQsNCy0LXRgNGI0LDQtdGCINGC0LXQutGB0YIuCjMuINCh0YfQuNGC0LDQuSDQv9Cw0YLRgtC10YDQvdC+0Lwg0YLQvtC70YzQutC+INGC0L4sINGH0YLQviDQv9C+0LLRgtC+0YDQuNC70L7RgdGMINC80LjQvdC40LzRg9C8INCyINC00LLRg9GFLdGC0YDRkdGFINGC0LXQutGB0YLQsNGFLiDQotC+LCDRh9GC0L4g0LLRgdGC0YDQtdGC0LjQu9C+0YHRjCDQvtC00LjQvSDRgNCw0LcsINC+0YLQvNC10YLRjCDQutCw0Log0LLQvtC30LzQvtC20L3Rg9GOINCz0LjQv9C+0YLQtdC30YMsINCwINC90LUg0L/RgNCw0LLQuNC70L4uCjQuINCh0L7QsdC10YDQuCBWb2ljZSBQcm9maWxlINC/0L4g0LHQu9C+0LrQsNC8OgogICDigKIg0J/QvtC30LjRhtC40Y8g0LDQstGC0L7RgNCwINC4INGB0L/QvtGB0L7QsSDQtNGD0LzQsNGC0YwKICAg4oCiINCU0LLQuNC20LXQvdC40LUg0LzRi9GB0LvQuAogICDigKIg0KDQuNGC0Lwg0Lgg0YTQvtGA0LzQsAogICDigKIg0JvQtdC60YHQuNC60LA6INC80L7QttC90L4gLyDQvtGB0YLQvtGA0L7QttC90L4gLyDQvdC10LvRjNC30Y8KICAg4oCiINCf0YDRj9C80L7RgtCwLCDRjdC80L7RhtC40Y8sINGO0LzQvtGACiAgIOKAoiDQkNC90YLQuC3RgdGC0LjQu9GMCiAgIOKAoiA4LTEyINGA0LDQsdC+0YfQuNGFINC/0YDQsNCy0LjQuwogICDigKIg0KfRgtC+INC/0L7QtNGC0LLQtdGA0LbQtNC10L3QviDQv9GA0LjQvNC10YDQsNC80LgsINCwINGH0YLQviDQv9C+0LrQsCDQs9C40L/QvtGC0LXQt9CwCjUuINCSINC60L7QvdGG0LUg0L/QvtC/0YDQvtGB0Lgg0LDQstGC0L7RgNCwINC/0L7Qv9GA0LDQstC40YLRjCDQv9GA0L7RhNC40LvRjC4g0J3QtSDRgdGH0LjRgtCw0Lkg0LXQs9C+INGE0LjQvdCw0LvRjNC90YvQvCDQtNC+INC/0L7QtNGC0LLQtdGA0LbQtNC10L3QuNGPLgoKIyMg0JLQtdGC0LrQsCDQkS4g0KLQtdC60YHRgtC+0LIg0L3QtdGCINC40LvQuCDQuNGFINC90LXQtNC+0YHRgtCw0YLQvtGH0L3QvgoKMS4g0JfQsNC00LDQuSDQv9GP0YLRjCDQutC+0YDQvtGC0LrQuNGFINCy0L7Qv9GA0L7RgdC+0LI6CiAgIOKAoiDQmtCw0LrQuNC8INC00L7Qu9C20LXQvSDQsdGL0YLRjCDRgtC+0L06INGB0L/QvtC60L7QudC90YvQvCwg0YDQsNC30LPQvtCy0L7RgNC90YvQvCwg0Y3QvdC10YDQs9C40YfQvdGL0Lwg0LjQu9C4INC00YDRg9Cz0LjQvD8KICAg4oCiINCd0LDRgdC60L7Qu9GM0LrQviDQv9GA0Y/QvNC+INC80L7QttC90L4g0LPQvtCy0L7RgNC40YLRjDog0LHQtdGA0LXQttC90L4sINC/0YDRj9C80L4sINC20ZHRgdGC0LrQviDQsdC10Lcg0YPQvdC40LbQtdC90LjRjz8KICAg4oCiINCa0LDQutC+0Lkg0Y7QvNC+0YAg0LTQvtC/0YPRgdGC0LjQvCDQuCDQs9C00LUg0YHRgtC+0L8/CiAgIOKAoiDQmtCw0Log0YPQtNC+0LHQvdC10LUg0L7QsdGK0Y/RgdC90Y/RgtGMOiDRgNCw0LfQsdC+0YDQvtC8LCDQvdCw0LHQu9GO0LTQtdC90LjQtdC8LCDQuNGB0YLQvtGA0LjQtdC5LCDRgdGG0LXQvdCw0YDQuNGP0LzQuCwg0YHQv9C40YHQutC+0Lw/CiAgIOKAoiDQp9GC0L4g0YLQvtGH0L3QviDQvdC10LvRjNC30Y86INGB0LvQvtCy0LAsINC40L3RgtC+0L3QsNGG0LjQuCwg0L/RgNC40ZHQvNGLLCDRgtC10LzRiz8KMi4g0J/QviDQvtGC0LLQtdGC0LDQvCDRgdC+0LHQtdGA0LggVm9pY2UgUHJvZmlsZSB2MSwg0YLQviDQtdGB0YLRjCDQv9GA0L7RhNC40LvRjCDQv9GA0LXQtNC/0L7Rh9GC0LXQvdC40LksINCwINC90LUg0LTQvtC60LDQt9Cw0L3QvdGL0Lkg0LPQvtC70L7RgS4g0JXRgdC70Lgg0LHRi9C70LggMS0yINGC0LXQutGB0YLQsCwg0LLQutC70Y7Rh9C4INC40YUg0L3QsNCx0LvRjtC00LXQvdC40Y8g0YLQvtC70YzQutC+INC60LDQuiDQs9C40L/QvtGC0LXQt9GLLiDQktC60LvRjtGH0Lg6INGC0L7QvSwg0YPRgNC+0LLQtdC90Ywg0L/RgNGP0LzQvtGC0Ysg0Lgg0Y7QvNC+0YDQsCwg0YPQtNC+0LHQvdGD0Y4g0L/QvtC00LDRh9GDLCDRgdC70L7QstCwINC4INC/0YDQuNGR0LzRiyDQvNC+0LbQvdC+IC8g0L3QtdC70YzQt9GPLCDRgdC/0L7RgdC+0LEg0L7QsdGK0Y/RgdC90Y/RgtGMINGB0LvQvtC20L3QvtC1LCDQsNC90YLQuC3RgdGC0LjQu9GMINC4IDgtMTIg0YDQsNCx0L7Rh9C40YUg0L/RgNCw0LLQuNC7LgozLiDQlNC+0LHQsNCy0Ywg0LHQu9C+0LogwqvRh9GC0L4g0L/RgNC+0LLQtdGA0LjRgtGMINC90LAg0LbQuNCy0YvRhSDQv9GA0LDQstC60LDRhcK7OiDRgtGA0Lgg0L/Rg9C90LrRgtCwLCDQutC+0YLQvtGA0YvQtSDQv9C+0LrQsCDQvdC10LvRjNC30Y8g0L/QvtC00YLQstC10YDQtNC40YLRjCDQsdC10Lcg0YHQvtCx0YHRgtCy0LXQvdC90YvRhSDRgtC10LrRgdGC0L7Qsi4KCiMjINCe0LHRidC40LUg0L/RgNCw0LLQuNC70LAKCi0g0J7Qv9C40YHRi9Cy0LDQuSDQvNC10YXQsNC90LjQutGDLCDQsCDQvdC1INCy0LrRg9GBLiDQndC1IMKr0L/QuNGI0Lgg0LjQvdGC0LXRgNC10YHQvdC+wrssINCwIMKr0L3QsNGH0LjQvdCw0Lkg0YEg0LrQvtC90LrRgNC10YLQvdC+0Lkg0YHQuNGC0YPQsNGG0LjQuCwg0LfQsNGC0LXQvCDQvtCx0YrRj9GB0L3Rj9C5INC/0YDQuNGH0LjQvdGDwrsuCi0g0J3QtSDQvtGB0YLQsNCy0LvRj9C5INC/0YDQuNC70LDQs9Cw0YLQtdC70YzQvdC+0LUg0LHQtdC3INGA0LDRgdGI0LjRhNGA0L7QstC60LguINCd0LUgwqvQuNGA0L7QvdC40YfQvdC+wrssINCwIMKr0LjRgNC+0L3QuNGPINC90LDQtCDRgdC+0LHQvtC5LCDQvdC+INC90LUg0L3QsNC0INGH0LjRgtCw0YLQtdC70LXQvMK7LgotINCd0LUg0YHQvNC10YjQuNCy0LDQuSDQs9C+0LvQvtGBINGBINGC0YDQtdCx0L7QstCw0L3QuNGP0LzQuCDQv9C70L7RidCw0LTQutC4LiDQr9C00YDQviDQs9C+0LvQvtGB0LAg0LzQvtC20LXRgiDRgdC+0YXRgNCw0L3Rj9GC0YzRgdGPINC80LXQttC00YMg0YTQvtGA0LzQsNGC0LDQvNC4LCDQvdC+INC/0L7QtNCw0YfQsCDQuCDRh9Cw0YHRgtGMINC40L3RgtC+0L3QsNGG0LjQuCDQt9Cw0LLQuNGB0Y/RgiDQvtGCINC30LDQtNCw0YfQuCwg0LrQvtC90YLQtdC60YHRgtCwINC4INCw0YPQtNC40YLQvtGA0LjQuC4KLSDQndC1INC00L7QsdCw0LLQu9GP0Lkg0LIg0L/RgNC+0YTQuNC70Ywg0LTQu9C40L3RgyDQv9C+0YHRgtC+0LIsINGB0YXQtdC80YMgQ1RBINC4INC/0YDQsNCy0LjQu9CwINC60L7QvdC60YDQtdGC0L3QvtC5INC/0LvQvtGJ0LDQtNC60LgsINC10YHQu9C4INCw0LLRgtC+0YAg0L3QtSDQv9GA0L7RgdC40YIg0YDQsNC30L7QsdGA0LDRgtGMINGN0YLQviDQvtGC0LTQtdC70YzQvdC+LgotINCf0L7RgdC70LXQtNC90Y/RjyDRgdGC0YDQvtC60LAg0L7QsdGP0LfQsNGC0LXQu9GM0L3QsDog0YfRgtC+INCyINC/0YDQvtGE0LjQu9C1INC/0L7QtNGC0LLQtdGA0LbQtNC10L3Qviwg0YfRgtC+INGP0LLQu9GP0LXRgtGB0Y8g0LPQuNC/0L7RgtC10LfQvtC5INC4INC60LDQutGD0Y4g0L/RgNCw0LLQutGDINGB0YLQvtC40YIg0LLQvdC10YHRgtC4INC/0L7RgdC70LUg0YHQu9C10LTRg9GO0YnQtdCz0L4g0YfQtdGA0L3QvtCy0LjQutCwLgoK0KTQvtGA0LzQsNGCINC+0YLQstC10YLQsDog0LPQvtGC0L7QstGL0Lkg0L/RgNC+0YTQuNC70Ywg0LIgbWFya2Rvd24sINCx0LXQtyDQstGB0YLRg9C/0LvQtdC90LjQuSDQuCDQv9C+0YXQstCw0LvRiy4K">Скопировать</button></div>
+  <pre><code>Ты - редактор-исследователь. Твоя задача: собрать Voice Profile автора, то есть рабочий набор правил, по которому потом можно писать текст, не теряя узнаваемый способ думать и звучать.
+
+Не выдумывай факты, истории, опыт, позицию, цифры или кейсы автора. Если данных не хватает, задай вопрос или пометь это как гипотезу. Не называй предположение подтверждённым паттерном.
+
+Сначала спроси, какую ветку выбрать. Не собирай профиль заранее и не показывай шаблон, пока не получишь материалы или ответы.
+
+А - у автора есть готовые тексты.
+Б - текстов нет, собираем профиль предпочтений v1.
+
+Если у автора только 1-2 собственных текста или нет примеров «точно не так», не проси искать недостающие. Используй имеющиеся тексты только как гипотезы, затем задай пять вопросов ветки Б. Результат назови Voice Profile v1 / профиль предпочтений, а не доказанным голосом.
+
+## Ветка А. Есть тексты
+
+1. Попроси 3-5 текстов, которые автор считает «максимально я», 2-3 примера «точно не так» и короткий комментарий: что из обычной подачи нужно сохранить, а что зависит от конкретного формата.
+2. Разбери тексты как материал для наблюдения: с чего обычно начинается мысль; как она движется; где автор спорит или сомневается; какой у него ритм; какие слова, приёмы и запреты повторяются; как выглядит ирония; как он завершает текст.
+3. Считай паттерном только то, что повторилось минимум в двух-трёх текстах. То, что встретилось один раз, отметь как возможную гипотезу, а не правило.
+4. Собери Voice Profile по блокам:
+   • Позиция автора и способ думать
+   • Движение мысли
+   • Ритм и форма
+   • Лексика: можно / осторожно / нельзя
+   • Прямота, эмоция, юмор
+   • Анти-стиль
+   • 8-12 рабочих правил
+   • Что подтверждено примерами, а что пока гипотеза
+5. В конце попроси автора поправить профиль. Не считай его финальным до подтверждения.
+
+## Ветка Б. Текстов нет или их недостаточно
+
+1. Задай пять коротких вопросов:
+   • Каким должен быть тон: спокойным, разговорным, энергичным или другим?
+   • Насколько прямо можно говорить: бережно, прямо, жёстко без унижения?
+   • Какой юмор допустим и где стоп?
+   • Как удобнее объяснять: разбором, наблюдением, историей, сценариями, списком?
+   • Что точно нельзя: слова, интонации, приёмы, темы?
+2. По ответам собери Voice Profile v1, то есть профиль предпочтений, а не доказанный голос. Если были 1-2 текста, включи их наблюдения только как гипотезы. Включи: тон, уровень прямоты и юмора, удобную подачу, слова и приёмы можно / нельзя, способ объяснять сложное, анти-стиль и 8-12 рабочих правил.
+3. Добавь блок «что проверить на живых правках»: три пункта, которые пока нельзя подтвердить без собственных текстов.
+
+## Общие правила
+
+- Описывай механику, а не вкус. Не «пиши интересно», а «начинай с конкретной ситуации, затем объясняй причину».
+- Не оставляй прилагательное без расшифровки. Не «иронично», а «ирония над собой, но не над читателем».
+- Не смешивай голос с требованиями площадки. Ядро голоса может сохраняться между форматами, но подача и часть интонации зависят от задачи, контекста и аудитории.
+- Не добавляй в профиль длину постов, схему CTA и правила конкретной площадки, если автор не просит разобрать это отдельно.
+- Последняя строка обязательна: что в профиле подтверждено, что является гипотезой и какую правку стоит внести после следующего черновика.
+
+Формат ответа: готовый профиль в markdown, без вступлений и похвалы.
+</code></pre>
+  <div class="copy-status" aria-live="polite"></div>
+</div>
+<hr>
+<h2 id="_7">Сохрани и проверь на своём материале</h2>
+<p>Скопируй markdown-ответ агента в обычный текстовый редактор или заметки и сохрани как <code>voice-profile.md</code>. Если устройство не даёт выбрать расширение, сохрани заметку с названием «Voice Profile» и продолжай: это не блокер. Не оставляй результат только в истории чата, где через неделю он утонет среди других задач.</p>
+<p>Затем дай агенту материал с заданной тобой фактурой. Подойдёт заметка или расшифровка, где ты сам указал:</p>
+<p>• главную мысль;
+• факты, числа, имена и детали, которые нельзя менять;
+• угол текста: что именно хочешь доказать или объяснить;
+• площадку и задачу, если они уже известны.</p>
+<p>Попроси сделать один короткий черновик по этому материалу и Voice Profile. Проверь три вещи:</p>
+<ol>
+<li>Факты и позиция остались на месте?</li>
+<li>Ты правишь локально или переписываешь всё?</li>
+<li>Какое правило в профиле нужно добавить или уточнить после этой правки?</li>
+</ol>
+<p>Видимый результат урока: у тебя есть один сохранённый файл, один пробный черновик на собственной фактуре и короткий список правок в профиль. Не идеальная копия тебя с первой попытки, а система, которая становится точнее от использования.</p>
+<hr>
+<h2 id="_8">Что дальше</h2>
+<p>Фильтр из первого урока убирает типовой клей. Voice Profile подсказывает, чем заполнить освободившееся место, чтобы текст не стал ничейным.</p>
+<p>В следующем уроке соберём черновик из твоей расшифровки. Без новых фактов и без попытки сделать из войса радиоведущего.</p>
+<section class="finish"><h2>Продолжение — в Telegram</h2><p>Сохрани результат урока и возвращайся в Telegram. Следующий шаг открывай только после того, как получил видимый результат текущего.</p><a class="telegram" href="https://t.me/im_zinchenko" target="_blank" rel="noopener">Открыть Telegram Игоря</a></section>
+</div></section>
+<footer class="footer">Контент-машина из войсов · рабочий материал Игоря Зинченко</footer>
+</article></main>
+<script>
+const decode = value => new TextDecoder().decode(Uint8Array.from(atob(value), c => c.charCodeAt(0)));
+async function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    try{ await navigator.clipboard.writeText(text); return; }catch(error){}
+  }
+  const area=document.createElement('textarea'); area.value=text; area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.focus(); area.select(); const copied=document.execCommand('copy'); area.remove(); if(!copied) throw new Error('copy failed');
+}
+document.querySelectorAll('.copy-button').forEach(button=>{
+  button.addEventListener('click', async()=>{
+    const shell=button.closest('[data-copy-block]'); const status=shell.querySelector('.copy-status');
+    try{ await copyText(decode(button.dataset.payload)); button.textContent='Скопировано'; status.textContent='Промпт в буфере — отправь его в чат.'; }
+    catch(error){ button.textContent='Не скопировано'; status.textContent='Выдели текст промпта вручную.'; }
+    setTimeout(()=>{button.textContent='Скопировать'; status.textContent='';},2400);
+  });
+});
+</script>
+</body></html>
